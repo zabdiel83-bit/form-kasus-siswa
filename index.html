@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Form Kasus Pelanggaran Siswa</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      background-color: #f2f4f8;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 220px;
+      background-color: #2c3e50;
+      color: white;
+      height: 100vh;
+      position: fixed;
+      padding: 20px;
+    }
+
+    .sidebar h3 {
+      margin-top: 0;
+      font-size: 18px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .sidebar a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 4px;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background-color: #1abc9c;
+    }
+
+    /* Content Area */
+    .content {
+      margin-left: 240px;
+      padding: 20px;
+      width: calc(100% - 240px);
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    header img {
+      width: 60px;
+      height: auto;
+    }
+
+    header h2 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    textarea, input, select {
+      width: 100%;
+      padding: 6px;
+      margin-top: 4px;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #1abc9c;
+      border: none;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #16a085;
+    }
+
+    .alert {
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #d4edda;
+      color: #155724;
+      display: none;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h3>Menu</h3>
+    <a href="index.html" class="active">📝 Input Data</a>
+    <a href="data.html">📊 Lihat & Edit Data</a>
+  </div>
+
+  <!-- Konten -->
+  <div class="content">
+    <header>
+      <img src="images/logoelkana.png" alt="Logo Sekolah" />
+      <h2>Form Pelanggaran Kasus Siswa</h2>
+    </header>
+
+    <form id="kasusForm" name="kasusForm">
+      <label>No</label>
+      <input type="number" name="no" required>
+
+      <label>Kelas</label>
+      <input type="text" name="kelas" required>
+
+      <label>Nama Siswa</label>
+      <input type="text" name="nama" required>
+
+      <label>Tanggal Kasus</label>
+      <input type="date" name="tanggal" required>
+
+      <label>Catatan Kasus</label>
+      <textarea name="catatan" required></textarea>
+
+      <label>Klasifikasi</label>
+      <select name="klasifikasi" required>
+        <option value="">-- Pilih --</option>
+        <option value="Kekerasan Fisik">Kekerasan Fisik</option>
+        <option value="Kekerasan Psikis">Kekerasan Psikis</option>
+        <option value="Perundungan">Perundungan</option>
+        <option value="Kekerasan Seksual">Kekerasan Seksual</option>
+        <option value="Intoleransi dan Diskriminasi">Intoleransi dan Diskriminasi</option>
+        <option value="Kebijakan Mengandung Kekerasan">Kebijakan Mengandung Kekerasan</option>
+      </select>
+
+      <label>Tindak Lanjut</label>
+      <select name="tindak" required>
+        <option value="">-- Pilih --</option>
+        <option value="Guru Kelas">Guru Kelas</option>
+        <option value="Guru BK">Guru BK</option>
+        <option value="Kepala Sekolah">Kepala Sekolah</option>
+      </select>
+
+      <label>Solusi</label>
+      <textarea name="solusi" required></textarea>
+
+      <label>Hasil</label>
+      <select name="hasil" required>
+        <option value="">-- Pilih --</option>
+        <option value="Berhasil">Berhasil</option>
+        <option value="Masih Belum Selesai">Masih Belum Selesai</option>
+      </select>
+
+      <button type="submit">Kirim Data</button>
+    </form>
+
+    <div class="alert" id="notifBerhasil">✅ Data berhasil dikirim. Anda bisa mengisi kasus berikutnya.</div>
+  </div>
+
+  <script>
+    const form = document.getElementById('kasusForm');
+    const notif = document.getElementById('notifBerhasil');
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbymLQJ63grHzIxfIRmbyliCd2u6igwygfACk2QhsBsPY-8TZl4tQjtv78oimG_hYpOD/exec'; // Ganti URL ini dengan milik Anda
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+
+      fetch(scriptURL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: new FormData(form)
+      })
+      .then(() => {
+        form.reset();
+        notif.style.display = 'block';
+        setTimeout(() => {
+          notif.style.display = 'none';
+        }, 5000);
+      })
+      .catch(error => {
+        alert('Gagal mengirim data: ' + error.message);
+      });
+    });
+  </script>
+</body>
+</html>
