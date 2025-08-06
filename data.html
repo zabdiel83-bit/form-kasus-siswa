@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lihat & Edit Data Kasus</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      background-color: #f8f9fa;
+    }
+
+    .sidebar {
+      width: 220px;
+      background-color: #2c3e50;
+      color: white;
+      height: 100vh;
+      position: fixed;
+      padding: 20px;
+    }
+
+    .sidebar h3 {
+      margin-top: 0;
+      font-size: 18px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .sidebar a {
+      display: block;
+      color: white;
+      text-decoration: none;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 4px;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background-color: #1abc9c;
+    }
+
+    .content {
+      margin-left: 240px;
+      padding: 20px;
+      width: calc(100% - 240px);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #1abc9c;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <h3>Menu</h3>
+    <a href="catatanpart2.html">✍️ Input Data</a>
+    <a href="data.html" class="active">📊 Lihat & Edit Data</a>
+  </div>
+
+  <div class="content">
+    <h2>📊 Data Kasus Pelanggaran Siswa</h2>
+    <p>Berikut adalah data yang telah dikumpulkan.</p>
+
+    <table id="data-table">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Kelas</th>
+          <th>Nama</th>
+          <th>Tanggal</th>
+          <th>Catatan</th>
+          <th>Klasifikasi</th>
+          <th>Tindak</th>
+          <th>Solusi</th>
+          <th>Hasil</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+  const sheetAPI = 'https://script.google.com/macros/s/AKfycbymLQJ63grHzIxfIRmbyliCd2u6igwygfACk2QhsBsPY-8TZl4tQjtv78oimG_hYpOD/exec'; // ganti dengan URL Web App kamu
+
+  fetch(sheetAPI, {
+    method: 'GET',
+    mode: 'cors'
+  })
+  .then(res => res.json())
+  .then(data => {
+    const tbody = document.querySelector('#data-table tbody');
+    if (!Array.isArray(data)) {
+      console.error("Data bukan array:", data);
+      return;
+    }
+
+    data.forEach(row => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${row.no || ''}</td>
+        <td>${row.kelas || ''}</td>
+        <td>${row.nama || ''}</td>
+        <td>${row.tanggal || ''}</td>
+        <td>${row.catatan || ''}</td>
+        <td>${row.klasifikasi || ''}</td>
+        <td>${row.tindak || ''}</td>
+        <td>${row.solusi || ''}</td>
+        <td>${row.hasil || ''}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  })
+  .catch(err => console.error('Gagal mengambil data:', err));
+</script>
+
+</body>
+</html>
